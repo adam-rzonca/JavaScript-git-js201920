@@ -1,18 +1,25 @@
 // // 1) Create a function that returns the sum of all elements passed in array as parameter. Function (array)=>number
 // let items = [1, 6, 23, 8, 4, 8, 3, 7];
+
+// console.log(items.reduce(sumAll, 0));
+
 // function sumAll(total, currentVal) {
 //   return total + currentVal;
 // }
-// console.log(items.reduce(sumAll, 0));
 
 // // 2) Create a function that returns sum of first and last elements of given array.
 // let items = [1, 6, 23, 8, 4, 8, 3, 7];
+
+// console.log(sumFirstAndLast(items));
+
 // function sumFirstAndLast(items) {
 //   return items[0] + items[items.length - 1];
 // }
-// console.log(sumFirstAndLast(items));
 
 // // 3) Create a function that takes a number and return factorial of that number.
+// let number = 7;
+// console.log(factorial(number));
+
 // function factorial(n) {
 //   if (n > 0) {
 //     return n * factorial(n - 1);
@@ -20,10 +27,10 @@
 //     return 1;
 //   }
 // }
-// console.log(factorial(7));
 
 // // 4) Create a function that returns given array in reverse order. No build in functions
 // let items = [1, 6, 23, 8, 4, 8, 3, 7];
+// console.log(reverseItems(items));
 
 // function reverseItems(items) {
 //   let result = [];
@@ -32,10 +39,11 @@
 //   }
 //   return result;
 // }
-// console.log(reverseItems(items));
 
 // // 5) Create a function that based on given array returns new array in pattern [a,b,c,d,e,f] -> [a+b, c+d, e+f]    [1,3,4,1,0,3] => [4,5,3] function(array)=>array
 // let items = [1, 6, 23, 8, 4, 8, 3, 7];
+
+// console.log(retNewArray(items));
 
 // function retNewArray(items) {
 //   let result = [];
@@ -44,11 +52,12 @@
 //   }
 //   return result;
 // }
-// console.log(retNewArray(items));
 
 // // 6) For time of this example remove last element from the given array.
 // // Create a function that based on given array return new array in pattern [a,b,c,d,e] -> [a+b, c+d, e+e]
 // let items = [1, 6, 23, 8, 4, 8, 3];
+
+// console.log(retNewArray(items));
 
 // function retNewArray(items) {
 //   let result = [];
@@ -61,38 +70,30 @@
 //   }
 //   return result;
 // }
-// console.log(retNewArray(items));
 
 // // 7) Create a function the return one random element from given array. // use random function
+// const myFunctions = require("./myFunctions.js");
+
 // let items = [1, 6, 23, 8, 4, 8, 3, 7];
 
-// function retRandomValFromArray(items) {
-//   let randomIndex = getRandomInt(0, items.length - 1);
-//   console.log("Index:", randomIndex);
-//   return items[randomIndex];
-// }
-
-// // Przykład z dokumentacji https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-// function getRandomInt(min, max) {
-//   min = Math.ceil(min); // Zaokrąglenie liczby w górę
-//   max = Math.floor(max); // Zaokrąglenie liczby w dół
-//   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-// }
-
-// console.log("Value:", retRandomValFromArray(items));
+// console.log("Value:", myFunctions.retRandomValFromArray(items));
 
 // // 8) Create a function that takes two parameters: array and number off attempts.
 // // Based on number of attempts choose a random number from table that many times and return lowest one.
+// const myFunctions = require("./myFunctions.js");
+
 // let items = [1, 6, 23, 8, 4, 8, 3, 7];
+// let attemps = 5;
+// console.log(retMinFromRandomNumbers(items, attemps));
 
 // function retMinFromRandomNumbers(items, attemps) {
 //   let randomNumbers = [];
 //   for (let i = 0; i < attemps; i++) {
-//     randomNumbers.push(retRandomValFromArray(items));
+//     randomNumbers.push(myFunctions.retRandomValFromArray(items));
 //   }
 
 //   let minVal = randomNumbers[0];
-//   for (let i = 0; i < randomNumbers; i++) {
+//   for (let i = 0; i < randomNumbers.length; i++) {
 //     let number = randomNumbers[i];
 //     if (number < minVal) {
 //       minVal = number;
@@ -101,18 +102,64 @@
 //   return minVal;
 // }
 
-// let attemps = 5;
-// console.log(retMinFromRandomNumbers(items, attemps));
+// 9) Create a function that takes given array. Then takes a random element, removes it from the array
+// and pushes it to result arrays. This takes place as long as there are elements in source array.
+// const myFunctions = require("./myFunctions.js");
 
-// function retRandomValFromArray(items) {
-//   let randomIndex = getRandomInt(0, items.length - 1);
-//   console.log("Index:", randomIndex);
-//   return items[randomIndex];
+// let items = [1, 6, 23, 8, 4, 8, 3, 7];
+// let result = [];
+// while (items.length) {
+//   let randomIndex = myFunctions.getRandomInt(0, items.length - 1);
+//   result.push(items[randomIndex]);
+//   items.splice(randomIndex, 1);
 // }
 
-// // Przykład z dokumentacji https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-// function getRandomInt(min, max) {
-//   min = Math.ceil(min); // Zaokrąglenie liczby w górę
-//   max = Math.floor(max); // Zaokrąglenie liczby w dół
-//   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+// console.log(result);
+
+// // 10) Create a function that on given array will perform operation of adding or subtracting elements.
+// // Operation is to be chosen at random. And return a result.[a,b,c,d] =>(((a+-b)+-c)+-d)
+// const myFunctions = require("./myFunctions.js");
+
+// let items = [1, 6, 23, 8, 4, 8, 3, 7];
+// console.log(items.reduce(performRandomOperation, 0));
+
+// function performRandomOperation(total, currentVal) {
+//   let operation = myFunctions.getRandomInt(0, 1);
+//   console.log((operation ? "+" : "-") + currentVal);
+//   return total + (operation ? currentVal : -currentVal);
+// }
+
+// // 11) Create a function that will return the current day name in Polish.
+// console.log(retPolishDayName());
+
+// function retPolishDayName() {
+//   let days = [
+//     "Niedziela",
+//     "Poniedziałek",
+//     "Wtorek",
+//     "Środa",
+//     "Czwartek",
+//     "Piątek",
+//     "Sobota"
+//   ];
+
+//   return days[new Date().getDay()];
+// }
+
+// // 12) Create a function that tells us how many days till Friday
+// console.log(piatekPiateczekPiatunio());
+
+// function piatekPiateczekPiatunio() {
+//   return 5 - new Date().getDay();
+// }
+
+// // 13) Create a function that take two numbers and return the object with 4 fields.
+// // Result on 4 basic arithmetic operations.
+// let x = 4,
+//   y = 5;
+
+// console.log(createObject(x, y));
+
+// function createObject(x, y) {
+//   return { add: x + y, sub: x - y, mul: x * y, div: x / y };
 // }
