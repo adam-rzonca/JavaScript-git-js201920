@@ -10,7 +10,9 @@ Function field that points to a function with math operation (defined at the beg
 A function setOperation() that sets the field from previous sentence and a Calculate function that makes calculation and returns its value. 
 
 3) Create an array (by hand) of objects and call sum() function in context of each one of them.
-Sum function is to come from this object  BaseObject = { X,y, sum: function (){ return this.X+this.y}} 
+Sum function is to come from this object  BaseObject = { X,y, sum: function (){ return this.x+this.y}} 
+
+Example array: [{x:2,y:3},{x:-1,x:6,{x:0,x:8},…..] 
 
 4) Given an array of objects, for each object call operation() function in context of next object.
 If object is last, got back to start of the array for operation function. In loop;
