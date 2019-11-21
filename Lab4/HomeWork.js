@@ -31,16 +31,14 @@
 //         iii. What type on transaction was having what spending’s.
 //         iv. Values of the spending in each month
 //         v. Values of the spending in each day of the week
-
-let fs = require("fs");
+let ld = require("lodash");
 
 let Transactions = (function() {
-  let inputData,
-    transactions = [];
+  let transactions = [];
 
   return {
     readInputData: function(fileName) {
-      inputData = require(fileName);
+      let inputData = require(fileName);
 
       for (let i = 0; i < inputData.length; i++) {
         // Nazwy zmiennych powinny być zgodne z nazwami pól z obiektu,
@@ -54,12 +52,28 @@ let Transactions = (function() {
 
         let transaction = new Transaction(index, id, cost, paymentDetails);
         transactions.push(transaction);
-      }
 
-      console.log(transactions);
+        //console.log(transaction.paymentDetails);
+      }
     },
 
-    moneySpendInYear: function(year) {},
+    moneySpendInGivenYear: function(year) {
+      let transactionsFromGivenYear = [];
+
+      transactionsFromGivenYear = transactions.filter(transaction => {
+        return transaction.paymentDetails.date.getFullYear() == year;
+      });
+
+      return transactionsFromGivenYear.reduce(
+        (givenYearTransactionSum, transaction) => {
+          // transaction.cost mamy zrzutowany na Number, jednak:
+          // musimy wykorzystać round, bo takie rzeczy się odjaniepawlają z dodawaniem
+          // liczb zmiennoprzecinkowych, że nawet ja nie...
+          return ld.round(givenYearTransactionSum + transaction.cost, 2);
+        },
+        0 // Trzeba zainicjować typ zwracanej wartości
+      );
+    },
     companiesEarns: function() {},
     spendingsByTransactionType: function() {},
     spendingsByMonths: function() {},
@@ -69,17 +83,27 @@ let Transactions = (function() {
   function Transaction(index, id, cost, paymentDetails) {
     this.index = index;
     this.id = id;
-    this.cost = cost;
-    let { Type: type, company: company, date: date } = paymentDetails;
+    this.cost = Number.parseFloat(cost);
+    let { Type: type, company: company, date: dateString } = paymentDetails;
 
-    this.paymentDetails = new PaymentDetails(type, company, date);
+    this.paymentDetails = new PaymentDetails(type, company, dateString);
   }
 
-  function PaymentDetails(type, company, date) {
+  function PaymentDetails(type, company, dateString) {
+    let [day, month, year] = dateString.split("-");
     this.type = type;
     this.company = company;
-    this.date = date;
+    // Miesiące są, kurła, od 0 do 11 liczone !!!
+    this.date = new Date(year, month - 1, day);
   }
 })();
 
 Transactions.readInputData("./Data.json");
+
+let year = 2014;
+console.log(
+  "Money spend in",
+  year,
+  "year:",
+  Transactions.moneySpendInGivenYear(year)
+);
