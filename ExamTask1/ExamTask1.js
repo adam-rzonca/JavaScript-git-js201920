@@ -27,13 +27,8 @@ let firstThreeBalls = pullThreeBalls(balls);
 let nextThreeBalls = pullThreeBalls(balls);
 
 // Liczymy wagi każdej z trójek wylosowanych kul
-// lodash-owe rdeduce jest lepsze niż Array.reduce, bo pozwala okreslić typ zwracanej wartości
-// (w tym przypadku 0 - number).
-// Array reduce próbowałoby "dosumowywać" currentBall.weight do obiektu typu ball,
-// który jest elementem tablic firstThreeBalls i nextThreeBalls...
-
-let weightOfFirstThreeBalls = ld.reduce(firstThreeBalls, sumBallWeigth, 0);
-let weightOfNextThreeBalls = ld.reduce(nextThreeBalls, sumBallWeigth, 0);
+let weightOfFirstThreeBalls = ld.reduce(firstThreeBalls, sumBallsWeigth, 0);
+let weightOfNextThreeBalls = ld.reduce(nextThreeBalls, sumBallsWeigth, 0);
 
 // PIERWSZE WAŻENIE
 // Porównujemy wagę trzech pierwszych kul z wagą kolejnych trzech kul.
@@ -64,7 +59,7 @@ if (weightOfFirstThreeBalls === weightOfNextThreeBalls) {
 console.log("The heaviest ball index is", heaviestBall.idx);
 console.log("The heaviest ball weight is", heaviestBall.weight);
 
-function sumBallWeigth(totalWeight, currentBall) {
+function sumBallsWeigth(totalWeight, currentBall) {
   return totalWeight + currentBall.weight;
 }
 
