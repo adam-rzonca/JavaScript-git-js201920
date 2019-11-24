@@ -58,24 +58,50 @@ let Transactions = (function() {
     },
 
     moneySpendInGivenYear: function(year) {
-      let transactionsFromGivenYear = [];
+      let yearResult = 0;
 
-      transactionsFromGivenYear = transactions.filter(transaction => {
-        return transaction.paymentDetails.date.getFullYear() == year;
+      transactions.forEach(transaction => {
+        if (transaction.paymentDetails.date.getFullYear() == year) {
+          yearResult = ld.round(yearResult + transaction.cost, 2);
+        }
       });
 
-      return transactionsFromGivenYear.reduce(
-        (givenYearTransactionSum, transaction) => {
-          // transaction.cost mamy zrzutowany na Number, jednak:
-          // musimy wykorzystać round, bo takie rzeczy się odjaniepawlają z dodawaniem
-          // liczb zmiennoprzecinkowych, że nawet ja nie...
-          return ld.round(givenYearTransactionSum + transaction.cost, 2);
-        },
-        0 // Trzeba zainicjować typ zwracanej wartości
-      );
+      return yearResult;
     },
-    companiesEarns: function() {},
-    spendingsByTransactionType: function() {},
+
+    companiesEarns: function() {
+      let companiesEarns = {};
+
+      transactions.forEach(transaction => {
+        let company = transaction.paymentDetails.company;
+        let cost = transaction.cost;
+        if (companiesEarns[company] == undefined) {
+          companiesEarns[company] = cost;
+        } else {
+          companiesEarns[company] = ld.round(companiesEarns[company] + cost, 2);
+        }
+      });
+
+      return companiesEarns;
+    },
+    spendingsByTransactionType: function() {
+      let spendingsByTransactionType = {};
+
+      transactions.forEach(transaction => {
+        let type = transaction.paymentDetails.type;
+        let cost = transaction.cost;
+        if (spendingsByTransactionType[type] == undefined) {
+          spendingsByTransactionType[type] = cost;
+        } else {
+          spendingsByTransactionType[type] = ld.round(
+            spendingsByTransactionType[type] + cost,
+            2
+          );
+        }
+      });
+
+      return spendingsByTransactionType;
+    },
     spendingsByMonths: function() {},
     spendingsByWeekdays: function() {}
   };
@@ -107,3 +133,17 @@ console.log(
   "year:",
   Transactions.moneySpendInGivenYear(year)
 );
+
+year = 2015;
+console.log(
+  "Money spend in",
+  year,
+  "year:",
+  Transactions.moneySpendInGivenYear(year)
+);
+
+let companiesEarns = Transactions.companiesEarns();
+console.log("Companies earns:", companiesEarns);
+
+let transactionTypeSpendings = Transactions.spendingsByTransactionType();
+console.log("Spendings by transaction type:", transactionTypeSpendings);
