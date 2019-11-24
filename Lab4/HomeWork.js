@@ -57,59 +57,48 @@ let Transactions = (function() {
       }
     },
 
-    moneySpendInGivenYear: function(year) {
-      let yearResult = 0;
+    spendingsByDataGroup: function(inputKey) {
+      let earnByGroup = {};
 
       transactions.forEach(transaction => {
-        if (transaction.paymentDetails.date.getFullYear() == year) {
-          yearResult = ld.round(yearResult + transaction.cost, 2);
+        //let company = transaction.paymentDetails.company;
+        let dataKey;
+
+        switch (inputKey) {
+          case "year":
+            dataKey = transaction.paymentDetails.date.getFullYear();
+            break;
+          case "company":
+            dataKey = transaction.paymentDetails.company;
+            break;
+          case "type":
+            dataKey = transaction.paymentDetails.type;
+            break;
+          case "month":
+            dataKey = transaction.paymentDetails.date.getMonth();
+            break;
+          case "weekday":
+            dataKey = transaction.paymentDetails.date.getDay();
+            break;
+          default:
         }
-      });
 
-      return yearResult;
-    },
-
-    companiesEarns: function() {
-      let companiesEarns = {};
-
-      transactions.forEach(transaction => {
-        let company = transaction.paymentDetails.company;
         let cost = transaction.cost;
-        if (companiesEarns[company] == undefined) {
-          companiesEarns[company] = cost;
+        if (earnByGroup[dataKey] == undefined) {
+          earnByGroup[dataKey] = cost;
         } else {
-          companiesEarns[company] = ld.round(companiesEarns[company] + cost, 2);
+          earnByGroup[dataKey] = ld.round(earnByGroup[dataKey] + cost, 2);
         }
       });
 
-      return companiesEarns;
-    },
-    spendingsByTransactionType: function() {
-      let spendingsByTransactionType = {};
-
-      transactions.forEach(transaction => {
-        let type = transaction.paymentDetails.type;
-        let cost = transaction.cost;
-        if (spendingsByTransactionType[type] == undefined) {
-          spendingsByTransactionType[type] = cost;
-        } else {
-          spendingsByTransactionType[type] = ld.round(
-            spendingsByTransactionType[type] + cost,
-            2
-          );
-        }
-      });
-
-      return spendingsByTransactionType;
-    },
-    spendingsByMonths: function() {},
-    spendingsByWeekdays: function() {}
+      return earnByGroup;
+    }
   };
 
   function Transaction(index, id, cost, paymentDetails) {
     this.index = index;
     this.id = id;
-    this.cost = Number.parseFloat(cost);
+    this.cost = Number(cost);
     let { Type: type, company: company, date: dateString } = paymentDetails;
 
     this.paymentDetails = new PaymentDetails(type, company, dateString);
@@ -126,24 +115,9 @@ let Transactions = (function() {
 
 Transactions.readInputData("./Data.json");
 
-let year = 2014;
-console.log(
-  "Money spend in",
-  year,
-  "year:",
-  Transactions.moneySpendInGivenYear(year)
-);
-
-year = 2015;
-console.log(
-  "Money spend in",
-  year,
-  "year:",
-  Transactions.moneySpendInGivenYear(year)
-);
-
-let companiesEarns = Transactions.companiesEarns();
-console.log("Companies earns:", companiesEarns);
-
-let transactionTypeSpendings = Transactions.spendingsByTransactionType();
-console.log("Spendings by transaction type:", transactionTypeSpendings);
+console.log(Transactions.spendingsByDataGroup("year"));
+console.log(Transactions.spendingsByDataGroup("year")["2014"]);
+console.log(Transactions.spendingsByDataGroup("company"));
+console.log(Transactions.spendingsByDataGroup("type"));
+console.log(Transactions.spendingsByDataGroup("month"));
+console.log(Transactions.spendingsByDataGroup("weekday"));
