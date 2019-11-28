@@ -62,7 +62,7 @@ let Transactions = (function() {
       // Pusta tablica obiektów w postaci
       // {keyLabel: keyValue, "earn": value}
       // keyLabel to np. "year", "company" itp.
-      // keyValue to np. 2014, "ECSTASIA itp.
+      // keyValue to np. 2014, "ECSTASIA" itp.
       // Oczywiście: "earn" to etykieta pola a value jego wartość
       let earnsByGroups = [];
 
