@@ -34,6 +34,7 @@
 let ld = require("lodash");
 
 let Transactions = (function() {
+  //let transactions = {};
   let transactions = [];
 
   return {
@@ -57,41 +58,64 @@ let Transactions = (function() {
       }
     },
 
-    spendingsByDataGroup: function(inputKey) {
-      let earnByGroup = {};
+    spendingsByDataGroup: function(keyLabel) {
+      // Pusta tablica obiektów w postaci
+      // {keyLabel: keyValue, "earn": value}
+      // keyLabel to np. "year", "company" itp.
+      // keyValue to np. 2014, "ECSTASIA itp.
+      // Oczywiście: "earn" to etykieta pola a value jego wartość
+      let earnsByGroups = [];
 
       transactions.forEach(transaction => {
-        //let company = transaction.paymentDetails.company;
-        let dataKey;
+        let keyValue;
 
-        switch (inputKey) {
+        // keyLabel - etykieta klucza danych
+        // keyValue - wartośc klucza danych
+        switch (keyLabel) {
           case "year":
-            dataKey = transaction.paymentDetails.date.getFullYear();
+            keyValue = transaction.paymentDetails.date.getFullYear();
             break;
           case "company":
-            dataKey = transaction.paymentDetails.company;
+            keyValue = transaction.paymentDetails.company;
             break;
           case "type":
-            dataKey = transaction.paymentDetails.type;
+            keyValue = transaction.paymentDetails.type;
             break;
           case "month":
-            dataKey = transaction.paymentDetails.date.getMonth();
+            keyValue = transaction.paymentDetails.date.getMonth();
             break;
           case "weekday":
-            dataKey = transaction.paymentDetails.date.getDay();
+            keyValue = transaction.paymentDetails.date.getDay();
             break;
           default:
         }
 
         let cost = transaction.cost;
-        if (earnByGroup[dataKey] == undefined) {
-          earnByGroup[dataKey] = cost;
+        // Sprawdzamy, czy tablicy obiektów jest już zapis dla danego klucza danych.
+        // Czyli sprawdzamy, czy w tablicy istnieje np obiekt z polem "year" == 2014
+        // Gdzie "year" to keyLabel, a 2014 to keyValue
+        let groupEarn = earnsByGroups.find(element => {
+          return element[keyLabel] == keyValue;
+        });
+
+        if (groupEarn == undefined) {
+          // Jeśli nie ma w tablicy wpisu dla danego klucza, to dodajemy odpowiedni obiekt do tablicy
+          earnsByGroups.push({ [keyLabel]: keyValue, earn: cost });
         } else {
-          earnByGroup[dataKey] = ld.round(earnByGroup[dataKey] + cost, 2);
+          // Jeśli jest, to zwiekszamy wartość pola "earn"
+          groupEarn.earn = ld.round(groupEarn.earn + cost, 2);
         }
       });
 
-      return earnByGroup;
+      earnsByGroups.sort((elemA, elemB) => {
+        if (elemA[keyLabel] < elemB[keyLabel]) return -1;
+
+        if (elemA[keyLabel] > elemB[keyLabel]) return 1;
+
+        return 0;
+      });
+
+      return earnsByGroups;
     }
   };
 
@@ -115,9 +139,8 @@ let Transactions = (function() {
 
 Transactions.readInputData("./Data.json");
 
-console.log(Transactions.spendingsByDataGroup("year"));
-console.log(Transactions.spendingsByDataGroup("year")["2014"]);
-console.log(Transactions.spendingsByDataGroup("company"));
-console.log(Transactions.spendingsByDataGroup("type"));
-console.log(Transactions.spendingsByDataGroup("month"));
-console.log(Transactions.spendingsByDataGroup("weekday"));
+console.log(JSON.stringify(Transactions.spendingsByDataGroup("year")));
+console.log(JSON.stringify(Transactions.spendingsByDataGroup("company")));
+console.log(JSON.stringify(Transactions.spendingsByDataGroup("type")));
+console.log(JSON.stringify(Transactions.spendingsByDataGroup("month")));
+console.log(JSON.stringify(Transactions.spendingsByDataGroup("weekday")));
