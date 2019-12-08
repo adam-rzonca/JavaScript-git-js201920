@@ -8,6 +8,7 @@ const CardsColors = require("./cardsColors.js");
 // Funkcja drukuje układ pięciu kart.
 // Zawiera w sobie funkcję oneCardString(card), która drukuje info o jednej karcie,
 // czyli jej wartość oraz ikonkę koloru
+// hand to tablica pięciu obiektów w postaci {color:0-3, value: 2-14}
 function printHand(hand) {
   let cardsString =
     oneCardString(hand[0]) +

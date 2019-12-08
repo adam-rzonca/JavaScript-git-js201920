@@ -101,8 +101,7 @@ function kolor(hand) {
 }
 
 function strit(hand) {
-  checkIfInSequence(hand);
-  return;
+  return checkIfInSequence(hand);
 }
 
 function trojka(hand) {

@@ -120,11 +120,11 @@ for (let i = 0; i < 10; i++) {
 // console.log("\n************************");
 
 // let strit = [
-//   { color: 1, value: 5 },
-//   { color: 2, value: 6 },
-//   { color: 3, value: 7 },
-//   { color: 0, value: 8 },
-//   { color: 1, value: 9 }
+//   { color: 3, value: 9 },
+//   { color: 0, value: 10 },
+//   { color: 2, value: 11 },
+//   { color: 1, value: 12 },
+//   { color: 2, value: 13 }
 // ];
 // myHand = strit;
 // Deck.printHand(myHand);
