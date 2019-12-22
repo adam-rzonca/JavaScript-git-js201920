@@ -24,7 +24,7 @@ let solvedArray = [
   [4, 6, 7, 5, 1, 2, 9, 8, 3]
 ];
 
-let solvedUnsovedArray = [
+let solvedUnsolvedArray = [
   [1, 4, 9, 3, 6, 8, 5, 7, 2],
   [7, 2, 7, 1, 5, 4, 3, 9, 6],
   [5, 3, 6, 9, 2, 7, 1, 4, 8],
@@ -38,7 +38,7 @@ let solvedUnsovedArray = [
 
 let mySudoku = new Sudoku(unsolvedArray);
 // let mySudoku = new Sudoku(solvedArray);
-// let mySudoku = new Sudoku(solvedUnsovedArray);
+// let mySudoku = new Sudoku(solvedUnsolvedArray);
 console.log("UNSOLVED:");
 mySudoku.print();
 // console.log(mySudoku.isSolved());

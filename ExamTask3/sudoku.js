@@ -31,32 +31,31 @@ module.exports = class Sudoku {
         let cell = this.sudoku[i];
 
         if (cell.value > 0) continue;
-        // Sprawdzam, czy w komórkę można jednoznacznie wpisać liczbę z przedziału 1-9
-        // Sprawdzamy wiersz
-
+        // Sprawdzam, jakie liczby można wpisać w bieżącą komórkę
         let possibleNumbers = [];
         for (let j = 1; j <= 9; j++) {
           this.counter++;
 
+          // Sprawdzam wiersz
           if (this.getRow(cell.row).includes(j)) {
             continue;
           }
 
-          // Sprawdzamy kolumnę
+          // Sprawdzam kolumnę
           if (this.getColumn(cell.col).includes(j)) {
             continue;
           }
 
-          // Sprawdzamy kwadrat
+          // Sprawdzam kwadrat
           if (this.getSquare(cell.square).includes(j)) {
             continue;
           }
 
-          // Ta liczba jest możliwa do wpisania w komorkę
+          // Ta liczba jest możliwa do wpisania w komórkę
           possibleNumbers.push(j);
         }
 
-        // Jesli w komórkę mozna wpisać tylko jedną liczbę, to ją wpisujemy
+        // Jesli w komórkę można wpisać tylko jedną liczbę, to ją wpisujemy
         if (possibleNumbers.length == 1) {
           [cell.value] = possibleNumbers;
         }
