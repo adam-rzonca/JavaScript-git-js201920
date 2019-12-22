@@ -1,21 +1,20 @@
 // Sudoku, to tablica obiektów w postaci:
 // SudokuField
 // {
-// 	value: [1-9, ...] lub [],
+// 	value: 0-9,
 // 	row: 0-8,
 // 	col: 0-8,
 // 	square: 0-8
 // }
 // Gdzie:
-// value: to tablica z liczbami, jakie mogą być w tym polu:
-// [] - puste
-// [1-9] - wypełnione jedną pasującą liczbą
-// [1-9, 1-9, ...] - potencjalnie pasujace liczby
+// value: wartość komórki; jeśli 0 - to nie wypełniona
+// row, col - współrzędne komórki
 // square - jeden z dziewięciu kwadratów
 const ld = require("lodash");
 
 module.exports = class Sudoku {
   constructor(inutArray) {
+    this.counter = 0; // Licznik, ile razy sprawdzaliśmy, czy w komórkę można wpisać liczbę
     this.sudoku = [];
 
     for (let i = 0; i < 9; i++) {
@@ -23,15 +22,46 @@ module.exports = class Sudoku {
         let elem = this.sudoku.push(new SudokuField(i, j, inutArray[i][j]));
       }
     }
-
-    console.log(this.sudoku.length);
-    this.sudoku.forEach(elem => {
-      elem.print();
-    });
   }
 
   solve() {
-    do {} while (!this.isSolved());
+    do {
+      // Analizuję po kolei wszystkie komórki z tablicy obiektów SudokuField
+      for (let i = 0; i < 81; i++) {
+        let cell = this.sudoku[i];
+
+        if (cell.value > 0) continue;
+        // Sprawdzam, czy w komórkę można jednoznacznie wpisać liczbę z przedziału 1-9
+        // Sprawdzamy wiersz
+
+        let possibleNumbers = [];
+        for (let j = 1; j <= 9; j++) {
+          this.counter++;
+
+          if (this.getRow(cell.row).includes(j)) {
+            continue;
+          }
+
+          // Sprawdzamy kolumnę
+          if (this.getColumn(cell.col).includes(j)) {
+            continue;
+          }
+
+          // Sprawdzamy kwadrat
+          if (this.getSquare(cell.square).includes(j)) {
+            continue;
+          }
+
+          // Ta liczba jest możliwa do wpisania w komorkę
+          possibleNumbers.push(j);
+        }
+
+        // Jesli w komórkę mozna wpisać tylko jedną liczbę, to ją wpisujemy
+        if (possibleNumbers.length == 1) {
+          [cell.value] = possibleNumbers;
+        }
+      }
+    } while (!this.isSolved());
   }
 
   // Sudoku uznajemy za rozwiązne prawidłowo, jeśli
@@ -41,49 +71,43 @@ module.exports = class Sudoku {
   isValid() {
     for (let i = 0; i < 9; i++) {
       // Sprawdzamy, czy i-ty wiersz ma unikalne wartości
-      let row = this.sudoku.filter(cell => {
-        return cell.row == i;
-      });
+      let row = this.getRow(i);
 
-      if (isDuplicated(row)) {
+      if (isNotFiled(row) || isDuplicated(row)) {
         return false;
       }
 
       // Sprawdzamy, czy i-ta kolumna ma unikalne wartości
-      let col = this.sudoku.filter(cell => {
-        return cell.col == i;
-      });
+      let col = this.getColumn(i);
 
-      if (isDuplicated(col)) {
+      if (isNotFiled(col) || isDuplicated(col)) {
         return false;
       }
 
       // Sprawdzamy, czy i-ta kolumna ma unikalne wartości
-      let square = this.sudoku.filter(cell => {
-        return cell.square == i;
-      });
+      let square = this.getSquare(i);
 
-      if (isDuplicated(square)) {
+      if (isNotFiled(square) || isDuplicated(square)) {
         return false;
       }
-
-      return true;
     }
 
-    // Funkcja sprawdza, czy tablica obiektów typu SudokuField
-    // zawiera unikalne wartości
-    function isDuplicated(sudokuFieldArray) {
-      // Musimy przemapować tablicę obiektów SudokuField
-      // na tablicę zwykłych liczb
+    return true;
 
-      let array = sudokuFieldArray.map(cell => {
-        return cell.value[0];
+    // Funkcja sprawdza, czy value wszystkich pól z tablicy obiektów typu SudokuField
+    // jest większa od 0
+    function isNotFiled(sudokuFieldArray) {
+      return sudokuFieldArray.every(elem => {
+        return elem == 0;
       });
+    }
 
+    // Funkcja sprawdza, czy tablica liczb zawiera unikalne wartości
+    function isDuplicated(sudokuFieldArray) {
       // Sprawdzamy, czy array zawiera unikalne wartości
       // Porównując długość array z długością tablicy zawierjącej unikalne wartości z tablicy array
 
-      return array.length != ld.uniq(array).length;
+      return sudokuFieldArray.length != ld.uniq(sudokuFieldArray).length;
     }
   }
 
@@ -91,18 +115,43 @@ module.exports = class Sudoku {
   // zawierają jedną liczbę
   isSolved() {
     let isSolved = this.sudoku.every(cell => {
-      return cell.value.length == 1;
+      return cell.value != 0;
     });
 
     return isSolved;
   }
 
-  print() {}
+  print() {
+    this.sudoku.forEach(elem => {
+      elem.print();
+    });
+  }
+
+  getRow(i) {
+    let row = this.sudoku.filter(cell => {
+      return cell.row == i;
+    });
+    return row.map(elem => elem.value);
+  }
+
+  getColumn(i) {
+    let column = this.sudoku.filter(cell => {
+      return cell.col == i;
+    });
+    return column.map(elem => elem.value);
+  }
+
+  getSquare(i) {
+    let square = this.sudoku.filter(cell => {
+      return cell.square == i;
+    });
+    return square.map(elem => elem.value);
+  }
 };
 
 class SudokuField {
   constructor(i, j, value) {
-    this.value = value != 0 ? [value] : [];
+    this.value = value;
     this.row = i;
     this.col = j;
 
