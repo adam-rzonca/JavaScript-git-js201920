@@ -40,10 +40,14 @@ let solvedUnsovedArray = [
 let mySudoku = new Sudoku(solvedArray);
 // let mySudoku = new Sudoku(solvedUnsovedArray);
 
+// console.log(mySudoku.isSolved());
+
 //mySudoku.solve();
 
 if (!mySudoku.isValid()) {
   console.log("Rozwiązanie jest nieprawidłowe!");
+} else {
+  console.log("Rozwiązanie jest prawidłowe!");
 }
 
 mySudoku.print();
