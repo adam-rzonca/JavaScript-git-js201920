@@ -13,7 +13,7 @@ var utils = (function() {
   return { genString };
 })();
 
-class longestCommonSubstring {
+class LongestCommonSubstring {
   constructor(str1, str2) {
     this.str1 = str1;
     this.str2 = str2;
@@ -46,7 +46,7 @@ const strLen = 10;
 const str1 = utils.genString(strLen);
 const str2 = utils.genString(strLen);
 
-const lcs = new longestCommonSubstring(str1, str2);
+const lcs = new LongestCommonSubstring(str1, str2);
 const result = lcs.find();
 
 console.log(str1);
