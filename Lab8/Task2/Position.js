@@ -7,6 +7,6 @@ module.exports = class Position {
   }
 
   toString() {
-    return "(" + this.x + ", " + this.y + ")";
+    return "(" + String.fromCharCode(64 + this.x) + this.y + ")";
   }
 };

@@ -8,6 +8,24 @@ class ChessPiece {
     this.moveOptions = [];
   }
 
+  toString() {
+    let type;
+
+    if (this instanceof King) {
+      type = "king";
+    } else if (this instanceof Queen) {
+      type = "queen";
+    } else if (this instanceof Rook) {
+      type = "rook";
+    } else if (this instanceof Bishop) {
+      type = "bishop";
+    } else {
+      type = "knight";
+    }
+
+    return type + " " + this.position.toString();
+  }
+
   rowAndColumnMoves() {
     const result = [];
 
@@ -65,22 +83,6 @@ class ChessPiece {
       result.push(new Position(i, j));
     }
     return result;
-  }
-
-  toString() {
-    if (this instanceof King) {
-      return "\u2654";
-    } else if (this instanceof Queen) {
-      return "\u2655";
-    } else if (this instanceof Rook) {
-      return "\u2656";
-    } else if (this instanceof Bishop) {
-      return "\u2657";
-    } else if (this instanceof Knight) {
-      return "\u2658";
-    } else {
-      return "?";
-    }
   }
 }
 
