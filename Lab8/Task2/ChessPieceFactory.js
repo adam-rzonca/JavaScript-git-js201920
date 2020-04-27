@@ -12,15 +12,15 @@ class ChessPiece {
     let type;
 
     if (this instanceof King) {
-      type = "king";
+      type = chessPieceTypes[0];
     } else if (this instanceof Queen) {
-      type = "queen";
+      type = chessPieceTypes[1];
     } else if (this instanceof Rook) {
-      type = "rook";
+      type = chessPieceTypes[2];
     } else if (this instanceof Bishop) {
-      type = "bishop";
+      type = chessPieceTypes[3];
     } else {
-      type = "knight";
+      type = chessPieceTypes[4];
     }
 
     return type + " " + this.position.toString();

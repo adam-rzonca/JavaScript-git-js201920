@@ -26,9 +26,8 @@ module.exports = class ChessBoardGame {
       const randomChessPiece = this.createRandomChessPiece();
       this.chessPieces.push(randomChessPiece);
 
-      // Aktualizujemy listę bitych pól.
-      // Z wylosowanej figury dopisujemy tylko te bite przez nią pola, które jeszcze nie znajdują
-      // się na liscie bitych pól w grze
+      // Aktualizujemy listę bitych pól. Z wylosowanej figury dopisujemy tylko te
+      // bite przez nią pola, które jeszcze nie znajdują się na liście bitych pól w grze
       const filteredTab = randomChessPiece.moveOptions.filter((newPosition) => {
         const result = this.capturedFields.findIndex((oldPosition) => {
           return (
