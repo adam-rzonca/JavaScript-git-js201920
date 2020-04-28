@@ -7,7 +7,8 @@ module.exports = class Player {
     this.score = 0;
   }
 
-  // Metoda zwraca dwuelementową tablicę dwóch kart do pary
+  // Metoda próbuje znaleźć dwie karty do pary
+  // i zwrócić je w dwuelementowej tablicy
   getTwoPairedCards() {
     let card1, card2;
 
@@ -23,7 +24,7 @@ module.exports = class Player {
     return [];
   }
 
-  // Metoda znajduje kartę do pary.
+  // Metoda próbuje znaleźć kartę do pary
   getPairdedCard(card) {
     return this.knownCards.find(
       (c) => c.figure === card.figure && c.id !== card.id
