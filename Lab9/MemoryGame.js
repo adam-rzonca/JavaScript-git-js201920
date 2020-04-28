@@ -28,36 +28,50 @@ module.exports = class MemoryGame {
 
   play() {
     while (this.board.hasCards()) {
-      // Dobieranie kart przez graczy.
+      // Dobieranie kart przez kolejnych graczy
       for (let i = 0; i < this.players.length; i++) {
         const player = this.players[i];
         let card1, card2;
 
-        // Jeśli gracz zna id dwóch zgodnych kart, to je odwróć.
-        if (false) {
-          // TODO ...
-        } else {
-          // W przeciwny wypadku wylosuj dwie karty.
-          // Pierwszą:
-          card1 = this.board.getRandomCard();
+        // Sprawdzenie, czy gracz zna dwie identyczne karty
+        [card1, card2] = player.getTwoPairedCards();
 
-          // I drugą (ale z id innym niż card1.id):
-          card2 = this.board.getRandomCard(card1.id);
+        if (!card1 && !card2) {
+          // Jeśli gracz nie zna dwóch identycznych kart,
+          // to wylosuj pierwszą kartę z pominięciem kart znanych graczowi
+          card1 = this.board.getRandomCard(player.knownCards);
+          player.rememberCard(card1);
+
+          // Sprawdzenie, czy gracz zna kartę pasującą do wylosowanej
+          card2 = player.getPairdedCard(card1);
+          if (!card2) {
+            // Wylosuj drugą kartę z pominięciem kart znanych graczowi
+            card2 = this.board.getRandomCard(player.knownCards);
+            player.rememberCard(card2);
+          }
         }
 
         console.log("Player:", player.id, "Cards:", card1.figure, card2.figure);
 
-        // Jeśli gracz odwrócił dwie zgodne karty,
-        // to usuń ich numery ze zbioru kart pozostałych na stole
-        // i dopisz graczowi punkt.
+        // Jeśli gracz odwrócił dwie zgodne karty
         if (this.board.compareCards(card1, card2)) {
-          player.score++;
-
+          // Usuń je ze zbioru kart pozostałych na stole
           this.board.removeCard(card1);
           this.board.removeCard(card2);
 
+          // Dopisz graczowi punkt
+          player.score++;
+
+          // Usuń karty ze zbiorów kart znanych graczom, aby nie próbowali jej odkrć
+          // inni gracze, którzy też już ją poznali, ale jeszcze nie zdążyli jej odkryć
+          this.players.forEach((player) => {
+            player.removeCard(card1);
+            player.removeCard(card2);
+          });
+
           console.log("Player:", player.id, "score:", player.score);
 
+          // Kończymy grę, jeśli na stole już nie ma kart
           if (!this.board.hasCards()) {
             break;
           }
@@ -65,7 +79,7 @@ module.exports = class MemoryGame {
       }
     }
 
-    // Wypisanie wyników gry.
+    // Wypisanie wyników gry
     console.log("*** TOTAL SCORE ***");
     this.players.forEach((player) => {
       console.log("Player:", player.id, "score:", player.score);

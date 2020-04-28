@@ -7,7 +7,7 @@
 
 const MemoryGame = require("./MemoryGame");
 
-const playersNumber = 3;
+const playersNumber = 4;
 const game = new MemoryGame(playersNumber);
 
 game.play();

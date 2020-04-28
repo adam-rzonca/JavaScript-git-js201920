@@ -13,35 +13,32 @@ module.exports = class Board {
     );
   }
 
-  // Metoda zwraca obiekt typu Card o podanym id.
+  // Metoda zwraca kartę o podanym id.
   getCardById(id) {
-    return this.board.find((card) => card.id === id);
+    return this.board.find((c) => c.id === id);
   }
 
-  // Metoda losuje obiekt typu Card ze stołu.
-  // Jeśli podano exceptId, to w przypadku wylosowania karty z tym id,
-  // losowanie jest powtarzane.
-  getRandomCard(exceptId) {
-    let card;
-    do {
-      const index = utils.randomInt(0, this.board.length);
-      card = this.board[index];
-    } while (exceptId != undefined && card.id === exceptId);
+  // Metoda losuje kartę ze stołu, z pominięciem kart znanych graczowi
+  getRandomCard(except) {
+    const filteredCards = this.board.filter(
+      (card) => !except.some((c) => c.id === card.id)
+    );
 
-    return card;
+    const index = utils.randomInt(0, filteredCards.length);
+    return filteredCards[index];
   }
 
-  // Metoda usuwa obeikt typu Card ze stołu.
-  removeCard(removedCard) {
-    this.board = this.board.filter((card) => card !== removedCard);
+  // Metoda usuwa kartę z gry.
+  removeCard(card) {
+    this.board = this.board.filter((c) => c.id !== card.id);
   }
 
-  // Metoda porównuje symbole dwóch obiektów typu Card.
+  // Metoda porównuje symbole dwuch kart.
   compareCards(card1, card2) {
     return card1.figure === card2.figure;
   }
 
-  // Metoda sprawdza, czy na stole pozstały jeszcze jakieś karty.
+  // Metoda sprawdza, czy w grze pozstały jeszcze jakieś karty.
   hasCards() {
     return this.board.length;
   }
