@@ -12,6 +12,9 @@ module.exports = class PingPong {
     this.startPosition = this.board.startPosition;
     this.startVector = this.board.startVector;
 
+    // Tworząc obiekt Ball, nie można przekazać this.startPosition oraz this.startVector,
+    // ponieważ zostaną one przypisane przez referencję do position i vector oiektu Ball
+    // i będą się zmieniać w trakcie działania programu
     this.ball = new Ball(
       new Position(this.startPosition.x, this.startPosition.y),
       new Vector(this.startVector.x, this.startVector.y),
