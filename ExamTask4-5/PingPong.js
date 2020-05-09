@@ -2,8 +2,8 @@
 
 const Board = require("./Board");
 const Ball = require("./Ball");
-
-const { unvisitedChar } = require("./Chars");
+const Position = require("./Position");
+const Vector = require("./Vector");
 
 module.exports = class PingPong {
   constructor(inputBoard) {
@@ -12,18 +12,31 @@ module.exports = class PingPong {
     this.startPosition = this.board.startPosition;
     this.startVector = this.board.startVector;
 
-    this.ball = new Ball(this.startPosition, this.startVector, this.board);
+    this.ball = new Ball(
+      new Position(this.startPosition.x, this.startPosition.y),
+      new Vector(this.startVector.x, this.startVector.y),
+      this.board
+    );
 
+    // Uwaga: board i ball odwołuję się do siebie nawzajem w swoich instancjach
     this.board.ball = this.ball;
     this.ball.board = this.board;
   }
 
   play() {
-    while (!this.board.endGame()) {
+    do {
       this.board.draw();
       this.board.refreshBeforeMove();
       this.ball.move();
       this.board.refreshAfterMove();
-    }
+    } while (!this.endGame());
+  }
+
+  // Metoda sprawdza, czy pozostały nieodwiedzone pola, jeśli to gra trwa dalej
+  endGame() {
+    return (
+      this.ball.position.x === this.startPosition.x &&
+      this.ball.position.y === this.startPosition.y
+    );
   }
 };

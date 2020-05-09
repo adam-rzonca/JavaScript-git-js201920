@@ -50,12 +50,16 @@ module.exports = class Board {
 
   // Metoda odświeża stan stołu przed ruchem
   refreshBeforeMove() {
-    this.board[this.ball.position.x][this.ball.position.y] = visitedChar;
+    if (this.board[this.ball.position.x][this.ball.position.y] !== borderChar) {
+      this.board[this.ball.position.x][this.ball.position.y] = visitedChar;
+    }
   }
 
   // Metoda odświeża stan stołu po ruchu
   refreshAfterMove() {
-    this.board[this.ball.position.x][this.ball.position.y] = ballChar;
+    if (this.board[this.ball.position.x][this.ball.position.y] !== borderChar) {
+      this.board[this.ball.position.x][this.ball.position.y] = ballChar;
+    }
   }
 
   // Metoda rysuje w konsoli stan stołu
@@ -65,16 +69,6 @@ module.exports = class Board {
       const row = this.board[i].join();
       console.log(row);
     }
-  }
-
-  // Metoda sprawdza, czy pozostały nieodwiedzone pola, jeśli to gra trwa dalej
-  endGame() {
-    for (let i = 0; i < this.board.length; i++) {
-      const row = this.board[i];
-      if (row.some((elem) => elem === unvisitedChar)) return false;
-    }
-
-    return true;
   }
 
   // Metoda zwraca obiekt typu Position lub undefined
