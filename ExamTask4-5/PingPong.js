@@ -27,11 +27,11 @@ module.exports = class PingPong {
   }
 
   play() {
+    this.board.draw();
     do {
-      this.board.draw();
-      this.board.refreshBeforeMove();
       this.ball.move();
-      this.board.refreshAfterMove();
+      this.board.refreshBoard();
+      this.board.draw();
     } while (!this.endGame());
   }
 

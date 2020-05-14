@@ -1,7 +1,9 @@
+"use strict";
+
 const Position = require("./Position");
 const Vector = require("./Vector");
 
-const { borderChar, ballChar, visitedChar, unvisitedChar } = require("./Chars");
+const { borderChar, ballChar, fieldChar, randomChar } = require("./Chars");
 
 module.exports = class Board {
   constructor(board) {
@@ -27,39 +29,64 @@ module.exports = class Board {
         this.ball.position.y + this.ball.vector.y
       ] === borderChar
     ) {
-      let x, y;
+      let x, y, wallBounce;
       x = this.ball.vector.x;
       y = this.ball.vector.y;
+      wallBounce = false;
+
+      // Sprawdzamy, czy nastąpi odbicię wzgledem ściany x
       if (
         this.board[this.ball.position.x + this.ball.vector.x][
           this.ball.position.y
         ] === borderChar
       ) {
         x = -x;
+        wallBounce = true;
       }
+
+      // Sprawdzamy, czy nastąpi odbicię wzgledem ściany y
       if (
         this.board[this.ball.position.x][
           this.ball.position.y + this.ball.vector.y
         ] === borderChar
       ) {
         y = -y;
+        wallBounce = true;
       }
+
+      // Powyższe dwa przypadki rozwiazują nam sytuację odbicia od ściany,
+      // lub "wklęsłego" rogu
+      // Poniżej wyznaczamy wektor odbicia od "wypukłego" rogu
+      if (!wallBounce) {
+        x = -x;
+        y = -y;
+      }
+
       this.ball.vector = new Vector(x, y);
     }
   }
 
-  // Metoda odświeża stan stołu przed ruchem
-  refreshBeforeMove() {
-    if (this.board[this.ball.position.x][this.ball.position.y] !== borderChar) {
-      this.board[this.ball.position.x][this.ball.position.y] = visitedChar;
+  checkRandomDirection() {
+    if (this.board[this.ball.position.x][this.ball.position.y] === randomChar) {
+      let x, y;
+      x = this.ball.vector.x;
+      y = this.ball.vector.y;
+
+      do {
+        x *= Math.random() < 0.5 ? -1 : 1;
+        y *= Math.random() < 0.5 ? -1 : 1;
+      } while (x === -this.ball.vector.x && y === -this.ball.vector.y);
+
+      this.ball.vector = new Vector(x, y);
     }
   }
 
-  // Metoda odświeża stan stołu po ruchu
-  refreshAfterMove() {
-    if (this.board[this.ball.position.x][this.ball.position.y] !== borderChar) {
-      this.board[this.ball.position.x][this.ball.position.y] = ballChar;
-    }
+  refreshBoard() {
+    // Rysujemy piłkę na aktualnym polu
+    this.board[this.ball.position.x][this.ball.position.y] = ballChar;
+
+    // Na poprzednim polu rysujemy wolne pole
+    this.board[this.ball.prevPosition.x][this.ball.prevPosition.y] = fieldChar;
   }
 
   // Metoda rysuje w konsoli stan stołu

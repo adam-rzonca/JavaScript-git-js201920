@@ -1,6 +1,6 @@
 module.exports = {
   borderChar: "X",
   ballChar: "1",
-  unvisitedChar: "0",
-  visitedChar: " ",
+  fieldChar: "0",
+  randomChar: "Y",
 };
