@@ -1,10 +1,11 @@
 "use strict";
 
+const Position = require("./Position");
+
 module.exports = class Cell {
-  constructor(x, y, state) {
-    this.x = x;
-    this.y = y;
+  constructor(position, state, neighboursPositions) {
+    this.position = position;
     this.state = state;
-    this.neighbours = [];
+    this.neighboursPositions = neighboursPositions;
   }
 };

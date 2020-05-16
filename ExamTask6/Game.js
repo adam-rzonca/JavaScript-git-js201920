@@ -1,7 +1,7 @@
 "use strict";
 
 const GameOfLife = require("./GameOfLife");
-const inputStates = require("./input1");
+const inputStates = require("./input3");
 const cellSymbols = require("./CellSymbols");
 
 module.exports = class Game {
@@ -30,7 +30,7 @@ module.exports = class Game {
 
     //  Wypełniamy tablicę z aktualnym stanem gry
     state.forEach((cell) => {
-      this.gameResult[cell.x][cell.y] = cell.state;
+      this.gameResult[cell.position.x][cell.position.y] = cell.state;
     });
 
     // Wypisujemy tablicę z aktualnym stanem gry w konsoli
@@ -44,9 +44,11 @@ module.exports = class Game {
       console.log(row);
     }
   }
+
   setNextState() {
     this.gameOfLife.setNextState();
   }
+
   endGame() {
     return false;
   }
