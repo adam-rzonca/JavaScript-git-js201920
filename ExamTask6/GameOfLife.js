@@ -72,9 +72,12 @@ module.exports = class GameOfLife {
         if (aliveNeighboursNumber === 3) {
           newState = true; // to staje się żywa
         }
-      } // Jeśli komórka jest żywa i ma mniej niż dwóch lub więcej niż trzech sąsiadów
-      else if (aliveNeighboursNumber < 2 || aliveNeighboursNumber > 3) {
-        newState = false; // to umiera
+      } // Jeśli komórka jest żywa
+      else {
+        // i ma mniej niż dwóch lub więcej niż trzech sąsiadów
+        if (aliveNeighboursNumber < 2 || aliveNeighboursNumber > 3) {
+          newState = false; // to umiera
+        }
       }
 
       return new Cell(cell.position, newState, cell.neighboursPositions);

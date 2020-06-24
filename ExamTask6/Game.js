@@ -1,7 +1,7 @@
 "use strict";
 
 const GameOfLife = require("./GameOfLife");
-const inputStates = require("./input3");
+const inputStates = require("./input4");
 const cellSymbols = require("./CellSymbols");
 
 module.exports = class Game {
