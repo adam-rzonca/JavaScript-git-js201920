@@ -35,7 +35,6 @@ module.exports = class PingPong {
     } while (!this.endGame());
   }
 
-  // Metoda sprawdza, czy pozostały nieodwiedzone pola, jeśli to gra trwa dalej
   endGame() {
     return (
       this.ball.position.x === this.startPosition.x &&
